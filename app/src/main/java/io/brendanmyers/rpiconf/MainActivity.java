@@ -147,12 +147,22 @@ public class MainActivity extends Activity {
         }
     }
 
+    private static String reverseLines(final String text) {
+        String [] text_lines = text.split("\n");
+        StringBuilder buff = new StringBuilder();
+        for(int i=text_lines.length -1; i>= 0; --i) {
+            buff.append(text_lines[i] + "\n");
+        }
+        return buff.toString();
+    }
+
     private void writeOutput(final String text) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 String currentText = messageTextView.getText().toString();
-                messageTextView.setText(currentText + "\n" + text);
+                String reversedText = reverseLines(text);
+                messageTextView.setText(reversedText + "\n" + currentText);
             }
         });
     }
