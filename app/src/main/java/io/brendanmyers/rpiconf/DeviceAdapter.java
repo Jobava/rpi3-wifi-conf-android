@@ -19,7 +19,7 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
         super(context, resource, devices);
 
         this.devices = devices;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -28,13 +28,13 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView,ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View row = inflater.inflate(R.layout.spinner_devices_padded, parent, false);
 
         BluetoothDevice device = devices.get(position);
 
-        TextView name = (TextView)row.findViewById(R.id.name_label);
-        TextView address = (TextView)row.findViewById(R.id.address_label);
+        TextView name = (TextView) row.findViewById(R.id.name_label);
+        TextView address = (TextView) row.findViewById(R.id.address_label);
 
         name.setText(device.getName());
         address.setText(device.getAddress());
@@ -48,8 +48,8 @@ public class DeviceAdapter extends ArrayAdapter<BluetoothDevice> {
 
         BluetoothDevice device = devices.get(position);
 
-        TextView name = (TextView)row.findViewById(R.id.name_label);
-        TextView address = (TextView)row.findViewById(R.id.address_label);
+        TextView name = (TextView) row.findViewById(R.id.name_label);
+        TextView address = (TextView) row.findViewById(R.id.address_label);
 
         name.setText(device.getName());
         address.setText(device.getAddress());

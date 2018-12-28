@@ -3,91 +3,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="io.brendanmyers.rpiconf.MainActivity">
 
     <TextView
+        android:id="@+id/devices_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Paired Bluetooth Devices"
-        android:id="@+id/devices_label"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/paired_bluetooth_devices"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Spinner
+        android:id="@+id/devices_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/devices_spinner"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/devices_label" />
+        android:layout_below="@+id/devices_label"
+        android:layout_alignParentEnd="true" />
 
     <Button
+        android:id="@+id/refresh_devices_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refresh Devices"
-        android:id="@+id/refresh_devices_button"
         android:layout_below="@+id/devices_spinner"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:text="@string/refresh_devices" />
 
 
     <TextView
+        android:id="@+id/ssid_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="SSID"
-        android:id="@+id/ssid_label"
-        android:layout_below="@+id/refresh_devices_button" />
+        android:layout_below="@+id/refresh_devices_button"
+        android:text="@string/ssid"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
+        android:id="@+id/ssid_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ssid_text"
         android:layout_below="@+id/ssid_label"
         android:layout_alignParentStart="true" />
 
 
     <TextView
+        android:id="@+id/psk_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="PSK"
-        android:id="@+id/psk_label"
-        android:layout_below="@+id/ssid_text" />
+        android:layout_below="@+id/ssid_text"
+        android:text="@string/psk"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
+        android:id="@+id/psk_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/psk_text"
         android:layout_below="@+id/psk_label"
         android:layout_alignParentStart="true" />
 
 
     <Button
+        android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Configuration"
-        android:id="@+id/start_button"
         android:layout_below="@+id/psk_text"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:text="@string/start_configuration" />
 
     <TextView
         android:id="@+id/messages_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Messages"
         android:layout_below="@+id/start_button"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:text="@string/messages"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/messages_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
+        android:layout_height="70pt"
         android:layout_below="@+id/messages_label"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/ip_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/messages_text"
+        android:layout_alignParentStart="true"
+        android:text="192.168.x.x" />
 </RelativeLayout>

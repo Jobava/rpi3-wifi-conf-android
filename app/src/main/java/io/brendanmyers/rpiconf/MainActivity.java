@@ -1,5 +1,18 @@
 package io.brendanmyers.rpiconf;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,33 +20,40 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
-
 public class MainActivity extends Activity {
 
+    final UUID uuid = UUID.fromString("815425a5-bfac-47bf-9321-c5ff980b5e11");
+    final byte delimiter = 33;
     BluetoothSocket mmSocket;
-
     Spinner devicesSpinner;
     Button refreshDevicesButton;
     TextView ssidTextView;
     TextView pskTextView;
     Button startButton;
     TextView messageTextView;
-
+    TextView ipTextView;
+    int readBufferPosition = 0;
     private DeviceAdapter adapter_devices;
 
-    final UUID uuid = UUID.fromString("815425a5-bfac-47bf-9321-c5ff980b5e11");
-    final byte delimiter = 33;
-    int readBufferPosition = 0;
+    private static String reverseLines(final String text) {
+        String[] text_lines = text.split("\n");
+        StringBuilder buff = new StringBuilder();
+        for (int i = text_lines.length - 1; i >= 0; --i) {
+            buff.append(text_lines[i] + "\n");
+        }
+        return buff.toString();
+    }
+
+    private static String toAnchorTag(final String text) {
+        //takes a text of the form:
+        //     received:ip-address:x.x.x.x
+        // and outputs:
+        //     <a href='http://[ip-address]'>[ip-address]</a>
+        String[] parts = text.split(":");
+        String ipComponent = parts[parts.length - 1];
+        String output = "<a href=\"http://" + ipComponent + "\">" + ipComponent + "</a>";
+        return output;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +63,8 @@ public class MainActivity extends Activity {
         ssidTextView = (TextView) findViewById(R.id.ssid_text);
         pskTextView = (TextView) findViewById(R.id.psk_text);
         messageTextView = (TextView) findViewById(R.id.messages_text);
+        ipTextView = (TextView) findViewById(R.id.ip_address);
+        ipTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         devicesSpinner = (Spinner) findViewById(R.id.devices_spinner);
 
@@ -85,6 +107,68 @@ public class MainActivity extends Activity {
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
                 adapter_devices.add(device);
+            }
+        }
+    }
+
+    private void writeOutput(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String currentText = messageTextView.getText().toString();
+                String reversedText = reverseLines(text);
+                messageTextView.setText(reversedText + "\n" + currentText);
+                if (text.contains("ip-addres")) {
+                    String[] lines = text.split("\n");
+                    for (int i = 0; i < lines.length; ++i) {
+                        if (lines[i].contains("ip-addres")) {
+                            String anchorTag = toAnchorTag(lines[i]);
+                            ipTextView.setText(Html.fromHtml(anchorTag));
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void clearOutput() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageTextView.setText("");
+            }
+        });
+    }
+
+    /*
+     * TODO actually use the timeout
+     */
+    private void waitForResponse(InputStream mmInputStream, long timeout) throws IOException {
+        int bytesAvailable;
+
+        while (true) {
+            bytesAvailable = mmInputStream.available();
+            if (bytesAvailable > 0) {
+                byte[] packetBytes = new byte[bytesAvailable];
+                byte[] readBuffer = new byte[1024];
+                mmInputStream.read(packetBytes);
+
+                for (int i = 0; i < bytesAvailable; i++) {
+                    byte b = packetBytes[i];
+
+                    if (b == delimiter) {
+                        byte[] encodedBytes = new byte[readBufferPosition];
+                        System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+                        final String data = new String(encodedBytes, "US-ASCII");
+
+                        writeOutput("Received:" + data);
+
+                        return;
+                    } else {
+                        readBuffer[readBufferPosition++] = b;
+                    }
+                }
             }
         }
     }
@@ -144,67 +228,6 @@ public class MainActivity extends Activity {
             }
 
             writeOutput("Done.");
-        }
-    }
-
-    private static String reverseLines(final String text) {
-        String [] text_lines = text.split("\n");
-        StringBuilder buff = new StringBuilder();
-        for(int i=text_lines.length -1; i>= 0; --i) {
-            buff.append(text_lines[i] + "\n");
-        }
-        return buff.toString();
-    }
-
-    private void writeOutput(final String text) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String currentText = messageTextView.getText().toString();
-                String reversedText = reverseLines(text);
-                messageTextView.setText(reversedText + "\n" + currentText);
-            }
-        });
-    }
-
-    private void clearOutput() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                messageTextView.setText("");
-            }
-        });
-    }
-
-    /*
-     * TODO actually use the timeout
-     */
-    private void waitForResponse(InputStream mmInputStream, long timeout) throws IOException {
-        int bytesAvailable;
-
-        while (true) {
-            bytesAvailable = mmInputStream.available();
-            if (bytesAvailable > 0) {
-                byte[] packetBytes = new byte[bytesAvailable];
-                byte[] readBuffer = new byte[1024];
-                mmInputStream.read(packetBytes);
-
-                for (int i = 0; i < bytesAvailable; i++) {
-                    byte b = packetBytes[i];
-
-                    if (b == delimiter) {
-                        byte[] encodedBytes = new byte[readBufferPosition];
-                        System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
-                        final String data = new String(encodedBytes, "US-ASCII");
-
-                        writeOutput("Received:" + data);
-
-                        return;
-                    } else {
-                        readBuffer[readBufferPosition++] = b;
-                    }
-                }
-            }
         }
     }
 }

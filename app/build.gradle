@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'bitmi'
+            storeFile file('/home/jobava/android/key-store/bitmi.keystore')
+            keyPassword 'bitmi'
+            storePassword 'bitmi'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion '28.0.3'
-
     defaultConfig {
         applicationId "io.skygrid.bluetoothtest"
         minSdkVersion 19
@@ -23,7 +30,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
 }

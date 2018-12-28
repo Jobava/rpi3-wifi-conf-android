@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">RPi3 Wifi Config Tool</string>
+    <string name="app_name">Bitmi Configurator</string>
+    <string name="paired_bluetooth_devices">Dispozitive Bluetooth împerecheate</string>
+    <string name="refresh_devices">Reîncarcă dispozitivele</string>
+    <string name="ssid">SSID</string>
+    <string name="psk">Parola</string>
+    <string name="start_configuration">Începe configurarea</string>
+    <string name="messages">Mesaje</string>
 </resources>
