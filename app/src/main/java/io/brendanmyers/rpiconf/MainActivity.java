@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
     TextView ipTextView;
     int readBufferPosition = 0;
     private DeviceAdapter adapter_devices;
+    Button startMessagesActivity;
 
     private static String reverseLines(final String text) {
         String[] text_lines = text.split("\n");
@@ -67,6 +68,13 @@ public class MainActivity extends Activity {
         ipTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         devicesSpinner = (Spinner) findViewById(R.id.devices_spinner);
+        startMessagesActivity = (Button) findViewById(R.id.messages_button);
+        startMessagesActivity.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.startActivity(new Intent(MainActivity.this, MessagesActivity.class));
+            }
+        });
 
         refreshDevicesButton = (Button) findViewById(R.id.refresh_devices_button);
         startButton = (Button) findViewById(R.id.start_button);

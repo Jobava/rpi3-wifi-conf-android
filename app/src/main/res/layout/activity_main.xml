@@ -65,37 +65,41 @@
         android:layout_below="@+id/psk_label"
         android:layout_alignParentStart="true" />
 
-
-    <Button
-        android:id="@+id/start_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/psk_text"
-        android:layout_alignParentEnd="true"
-        android:text="@string/start_configuration" />
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/messages_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/start_button"
-        android:layout_alignParentStart="true"
-        android:text="@string/messages"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/start_configuration" />
 
-    <TextView
-        android:id="@+id/messages_text"
-        android:layout_width="wrap_content"
-        android:layout_height="70pt"
-        android:layout_below="@+id/messages_label"
-        android:layout_alignParentStart="true"
-        android:text="" />
+        <Button
+            android:id="@+id/messages_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/messages_button" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/ip_address"
+        android:layout_width="348dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttons_layout"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="11dp"
+        android:text="IP address will appear here (should be like: 192.168.x.x)" />
+    <TextView
+        android:id="@+id/ip_address_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/messages_text"
-        android:layout_alignParentStart="true"
-        android:text="192.168.x.x" />
+        android:layout_below="@+id/ip_address"
+        android:text="@string/ip_address_message"/>
 </RelativeLayout>

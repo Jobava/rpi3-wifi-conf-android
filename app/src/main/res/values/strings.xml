@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Bitmi Configurator</string>
-    <string name="paired_bluetooth_devices">Dispozitive Bluetooth împerecheate</string>
-    <string name="refresh_devices">Reîncarcă dispozitivele</string>
+    <string name="paired_bluetooth_devices">Paired bluetooth devices</string>
+    <string name="refresh_devices">Reload devices</string>
     <string name="ssid">SSID</string>
-    <string name="psk">Parola</string>
-    <string name="start_configuration">Începe configurarea</string>
-    <string name="messages">Mesaje</string>
+    <string name="psk">Password</string>
+    <string name="start_configuration">Begin configuring</string>
+    <string name="messages_button">Messages</string>
+    <string name="messages">Messages</string>
+    <string name="ip_address_message">Please wait 2-3 minutes or retry a few times...</string>
+    <string name="messages_activity_label">Messages</string>
+
 </resources>
