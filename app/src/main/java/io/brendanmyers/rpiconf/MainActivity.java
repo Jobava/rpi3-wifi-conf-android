@@ -30,7 +30,6 @@ public class MainActivity extends Activity {
     TextView ssidTextView;
     TextView pskTextView;
     Button startButton;
-    TextView messageTextView;
     TextView ipTextView;
     int readBufferPosition = 0;
     private DeviceAdapter adapter_devices;
@@ -52,7 +51,7 @@ public class MainActivity extends Activity {
         //     <a href='http://[ip-address]'>[ip-address]</a>
         String[] parts = text.split(":");
         String ipComponent = parts[parts.length - 1];
-        String output = "<a href=\"http://" + ipComponent + "\">" + ipComponent + "</a>";
+        String output = "Found a Bitmi at: <a href=\"http://" + ipComponent + "\">" + ipComponent + "</a>";
         return output;
     }
 
@@ -63,13 +62,13 @@ public class MainActivity extends Activity {
 
         ssidTextView = (TextView) findViewById(R.id.ssid_text);
         pskTextView = (TextView) findViewById(R.id.psk_text);
-        messageTextView = (TextView) findViewById(R.id.messages_text);
+
         ipTextView = (TextView) findViewById(R.id.ip_address);
         ipTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         devicesSpinner = (Spinner) findViewById(R.id.devices_spinner);
         startMessagesActivity = (Button) findViewById(R.id.messages_button);
-        startMessagesActivity.setOnClickListener(new View.OnClickListener(){
+        startMessagesActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.this.startActivity(new Intent(MainActivity.this, MessagesActivity.class));
@@ -123,9 +122,9 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String currentText = messageTextView.getText().toString();
+                String currentText = Globals.getMessages();
                 String reversedText = reverseLines(text);
-                messageTextView.setText(reversedText + "\n" + currentText);
+                Globals.setMessages(reversedText + "\n" + currentText);
                 if (text.contains("ip-addres")) {
                     String[] lines = text.split("\n");
                     for (int i = 0; i < lines.length; ++i) {
@@ -144,7 +143,7 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messageTextView.setText("");
+                Globals.setMessages("");
             }
         });
     }
